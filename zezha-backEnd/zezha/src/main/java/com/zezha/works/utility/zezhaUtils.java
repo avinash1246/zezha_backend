@@ -38,8 +38,8 @@ public class zezhaUtils {
     public static void main(String[] args) throws NoSuchAlgorithmException {
     	//String encryptedpass = encryptPassword("Avinash");
     	//System.out.println("encryptedpass--"+encryptedpass);
-    	System.out.println("decryptPassword--"+decryptPassword("b6bc7b58510319a151d168ba3d5aecb3ac0a9708d06dd930f37fbc89b6cdc697"));
-    	
-    	//System.out.println(checkPassword("Avinash", "864ca47546d52e2bdf50be382c85ef79dc87c291942df772f2047adc978255eb"));
+    	//System.out.println("decryptPassword--"+decryptPassword("b6bc7b58510319a151d168ba3d5aecb3ac0a9708d06dd930f37fbc89b6cdc697"));
+    	System.out.println(encryptPassword("Avinash"));
+    	System.out.println(checkPassword("Avinash", "864ca47546d52e2bdf50be382c85ef79dc87c291942df772f2047adc978255eb"));
 	}
 }
