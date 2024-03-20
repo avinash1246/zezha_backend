@@ -2,6 +2,7 @@ package com.zezha.works.Entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,8 @@ public class ApplyJob {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private int sno;
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique = true)
 	private String id;
 	private String appliedEmailId;
 	@CreationTimestamp
