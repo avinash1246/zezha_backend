@@ -732,16 +732,13 @@ public class zezhaService {
 				emailId = mobileNo.getEmail();
 			}
 			
-			ApplyJob emailData = applyJobRepo.findByAppliedEmailId(emailId);
-			if(emailData!=null) {
-				if(emailData.getId().equals(applyJob.getId())) {
-					job.setMessage("Job Already Applied");
-				}else {
-					jobData.setAppliedEmailId(emailId);
-					jobData.setId(String.valueOf(applyJob.getId()));
-					job= applyJobRepo.save(jobData);
-					job.setMessage("Job Applied Succesfullly");
-				}
+			List<ApplyJob> emailList = applyJobRepo.findByAppliedEmailId(emailId);
+			if(emailList.size()>0) job.setMessage("Job Already Applied");
+			else {
+				jobData.setAppliedEmailId(emailId);
+				jobData.setId(String.valueOf(applyJob.getId()));
+				job= applyJobRepo.save(jobData);
+				job.setMessage("Job Applied Succesfullly");
 			}
 			
 		}catch(Exception ex){
@@ -775,8 +772,6 @@ public class zezhaService {
 	public List<PostJob> displayJobsOnCompanies(PostJob legendsDetails) {
 		List<PostJob> details = new ArrayList<>();
 		List<PostJob> detailList = new ArrayList<>();
-		System.out.println("legendsDetails.getJobPostedBy()==="+legendsDetails.getJobPostedBy());
-		
 		try{
 			details = postjobRepo.findByJobPostedBy(legendsDetails.getJobPostedBy());
 			
@@ -896,6 +891,22 @@ public class zezhaService {
 			ex.printStackTrace();
 		}
 		return resObj;
+	}
+
+	public LegendsDetails resumeQrCode(LegendsDetails legendsDetails) {
+		LegendsDetails details = new LegendsDetails();
+		try {
+			if(legendsDetails.getUsername().contains("@")) {
+				details = updateRepo.findByEmail(legendsDetails.getUsername());
+			}else {
+				details = updateRepo.findByMobileNo(legendsDetails.getUsername());
+			}
+			String base64Img = imageUtils.generateQRCodeBase64(details.getResumeName());
+			details.setResumeName(base64Img);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return details;
 	}
 	
 }
