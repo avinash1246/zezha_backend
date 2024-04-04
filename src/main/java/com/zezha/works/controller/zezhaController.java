@@ -28,6 +28,9 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ListObjectsV2Request;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.zezha.works.Entity.ApplyJob;
 import com.zezha.works.Entity.LegendsDetails;
 import com.zezha.works.Entity.Model;
@@ -39,7 +42,9 @@ import com.zezha.works.service.zezhaService;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 
+
 @CrossOrigin(origins = "http://localhost:4401")
+//@CrossOrigin(origins = "http://zezhatalents.s3-website.ap-south-1.amazonaws.com")
 
 @RestController
 public class zezhaController {
@@ -334,16 +339,49 @@ public class zezhaController {
 		return service.resumeQrCode(legendsDetails);
 	}
 	
+//    public static void main(String[] args) {
+//        File imageFile = new File("D://images.jpg");
+//        ITesseract tesseract = new Tesseract();
+//        tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
+//        try {
+//            String result = tesseract.doOCR(imageFile);
+//            System.out.println(result);
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//        }
+//    }
+    
     public static void main(String[] args) {
-        File imageFile = new File("D://images.jpg");
-        ITesseract tesseract = new Tesseract();
-        tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
-        try {
-            String result = tesseract.doOCR(imageFile);
-            System.out.println(result);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+    	
+    	String accessKey = "AKIA36NDIH54ACQTPQM2";
+		String secretKey = "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";
+		String bucketName = "images-rajesh";
+		
+		BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
+        AWSStaticCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(awsCreds);
+
+        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(credsProvider)
+                .withRegion("us-east-1") // Change the region if necessary
+                .build();
+
+        ListObjectsV2Request req = new ListObjectsV2Request().withBucketName(bucketName);
+        ListObjectsV2Result result;
+
+        do {
+            result = s3Client.listObjectsV2(req);
+
+            for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
+                String key = objectSummary.getKey();
+
+                if (key.toLowerCase().endsWith(".jpg") || key.toLowerCase().endsWith(".avif")
+                        || key.toLowerCase().endsWith(".jpeg") || key.toLowerCase().endsWith(".png")) {
+                    String imageUrl = s3Client.getUrl(bucketName, key).toString();
+                    System.out.println(imageUrl);
+                }
+            }
+            req.setContinuationToken(result.getNextContinuationToken());
+        } while (result.isTruncated());
     }
 
 }

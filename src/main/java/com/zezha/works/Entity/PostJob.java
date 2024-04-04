@@ -17,31 +17,49 @@ public class PostJob {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int sno;
 	@Id
+	@Column(length = 20)
 	private String jobId;
+	@Column(length = 100)
 	private String jobHeadline;
+	@Column(length = 50)
 	private String employmentType;
 	@Column(columnDefinition = "LONGTEXT")
 	private String jobDescription;
 	@Column(columnDefinition = "LONGTEXT")
 	private String candidateProfile;
+	@Column(length = 100)
 	private String keySkills;
+	@Column(length = 20)
 	private String minYear;
+	@Column(length = 20)
 	private String maxyear;
+	@Column(length = 20)
 	private String minSalary;
+	@Column(length = 20)
 	private String maxSalary;
 	@Column(columnDefinition = "LONGTEXT")
 	private String location;
+	@Column(length = 50)
 	private String industry;
+	@Column(length = 50)
 	private String functionalArea;
+	@Column(length = 50)
 	private String role;
 	@Column(columnDefinition = "LONGTEXT")
 	private String eduQualification;
+	@Column(length = 50)
 	private String companyName;
+	@Column(length = 50)
 	private String companyProfile;
+	@Column(length = 50)
 	private String companyAddress;
+	@Column(length = 100)
 	private String vacancies;
+	@Column(length = 50)
 	private String jobPostedBy;
+	@Column(length = 50)
 	private String organisationSize;
+	@Column(length = 100)
 	private String logoImg;
 	@CreationTimestamp
 	private LocalDateTime createdDate;
